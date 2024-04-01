@@ -482,9 +482,9 @@ class PendingBlockHeaderSchema(Schema):
         ResourcePriceSchema(), data_key="l1_gas_price", required=True
     )
     l1_data_gas_price = fields.Nested(
-        ResourcePriceSchema(), data_key="l1_data_gas_price", required=True
+        ResourcePriceSchema(), data_key="l1_data_gas_price", required=False
     )
-    l1_da_mode = L1DAModeField(data_key="l1_da_mode", required=True)
+    l1_da_mode = L1DAModeField(data_key="l1_da_mode", required=False)
     starknet_version = fields.String(data_key="starknet_version", required=True)
 
 
@@ -527,7 +527,7 @@ class StarknetBlockSchema(BlockHeaderSchema):
 
     @post_load
     def make_dataclass(self, data, **kwargs) -> StarknetBlock:
-        return StarknetBlock(**data)
+        return StarknetBlock(l1_data_gas_price=ResourcePrice(0, 0), l1_da_mode='UNKNOWN', **data)
 
 
 class StarknetBlockWithTxHashesSchema(BlockHeaderSchema):
